@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>Dashboard</h1>
+
+    <a href="/add_subscription">Add Subscription</a>
+<a href="/ai_advisor">AI Subscription Advisor</a>
+<a href="/logout">Logout</a>
+
+    <h2>Total Monthly Spending: ${{ "%.2f"|format(total_monthly) }}</h2>
+
+    <h2>Search and Sort</h2>
+    <form method="GET" action="/dashboard">
+        <input type="text" name="search" placeholder="Search by name or category" value="{{ search }}">
+
+        <select name="sort_by">
+            <option value="">Select Sort Option</option>
+            <option value="name" {% if sort_by == "name" %}selected{% endif %}>Sort by Name</option>
+            <option value="price" {% if sort_by == "price" %}selected{% endif %}>Sort by Price</option>
+            <option value="renewal_date" {% if sort_by == "renewal_date" %}selected{% endif %}>Sort by Renewal Date</option>
+        </select>
+
+        <button type="submit">Apply</button>
+    </form>
+
+    <h2>Your Subscriptions</h2>
+
+    {% if subscriptions %}
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Billing Cycle</th>
+                <th>Start Date</th>
+                <th>Renewal Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+
+            {% for sub in subscriptions %}
+            <tr>
+                <td>{{ sub.id }}</td>
+                <td>{{ sub.name }}</td>
+                <td>{{ sub.category }}</td>
+                <td>{{ sub.price }}</td>
+                <td>{{ sub.billing_cycle }}</td>
+                <td>{{ sub.start_date }}</td>
+                <td>{{ sub.renewal_date }}</td>
+                <td>
+                    {% if sub.status == "Expired" %}
+                        <span style="color: white; background-color: red; padding: 5px 10px; border-radius: 5px;">Expired</span>
+                    {% elif sub.status == "Due Soon" %}
+                        <span style="color: black; background-color: yellow; padding: 5px 10px; border-radius: 5px;">Due Soon</span>
+                    {% else %}
+                        <span style="color: white; background-color: green; padding: 5px 10px; border-radius: 5px;">Active</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="/edit_subscription/{{ sub.id }}">Edit</a>
+                    <a href="/delete_subscription/{{ sub.id }}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No subscriptions found.</p>
+    {% endif %}
+</div>
+</body>
+</html>

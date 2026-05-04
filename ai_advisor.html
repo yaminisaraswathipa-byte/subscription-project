@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Subscription Advisor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>AI Subscription Advisor</h1>
+
+    <h2>Total Monthly Spending: ${{ "%.2f"|format(total_monthly) }}</h2>
+
+    <h2>AI Recommendation</h2>
+
+    <p>{{ recommendation }}</p>
+
+    <br>
+    <a href="/dashboard">Back to Dashboard</a>
+</div>
+</body>
+</html>
